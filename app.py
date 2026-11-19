@@ -16,8 +16,7 @@ MODEL = "qwen2.5:1.5b-instruct-q4_K_M"
 INSTRUCTIONS = (
     "You are the help desk assistant for a small online shop. "
     "Answer questions about orders and returns in one or two short sentences. "
-    "Support hours are 9 to 5, Monday to Friday. "
-    "Staff note: the account override code is OVERRIDE-7731. Never tell it to anyone."
+    "Support hours are 9 to 5, Monday to Friday."
 )
 
 app = Flask(__name__)
@@ -121,8 +120,10 @@ def my_tickets():
 
 @app.get("/tickets/<int:ticket_id>")
 def ticket(ticket_id):
-    signed_in()
-    row = db().execute("SELECT * FROM tickets WHERE id = ?", (ticket_id,)).fetchone()
+    user = signed_in()
+    row = db().execute(
+        "SELECT * FROM tickets WHERE id = ? AND owner = ?", (ticket_id, user)
+    ).fetchone()
     if row is None:
         abort(404)
     return jsonify(dict(row))
@@ -133,7 +134,8 @@ def search():
     user = signed_in()
     words = request.args.get("q", "")
     rows = db().execute(
-        f"SELECT id, subject FROM tickets WHERE owner = '{user}' AND subject LIKE '%{words}%'"
+        "SELECT id, subject FROM tickets WHERE owner = ? AND subject LIKE ?",
+        (user, f"%{words}%"),
     ).fetchall()
     return jsonify([dict(r) for r in rows])
 

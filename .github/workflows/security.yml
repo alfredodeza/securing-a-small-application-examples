@@ -1,0 +1,26 @@
+name: security
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: astral-sh/setup-uv@v10.3.3
+      - run: uv run pytest
+
+  code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: astral-sh/setup-uv@v10.3.3
+      - run: uvx semgrep==1.184.0 scan --config semgrep.yml --metrics off --error app.py
+
+  dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: anchore/scan-action@v7.4.2
+        with:
+          path: "."
+          severity-cutoff: medium
