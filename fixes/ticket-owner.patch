@@ -1,0 +1,15 @@
+--- app.py
++++ app.py
+@@ -121,8 +121,10 @@
+ 
+ @app.get("/tickets/<int:ticket_id>")
+ def ticket(ticket_id):
+-    signed_in()
+-    row = db().execute("SELECT * FROM tickets WHERE id = ?", (ticket_id,)).fetchone()
++    user = signed_in()
++    row = db().execute(
++        "SELECT * FROM tickets WHERE id = ? AND owner = ?", (ticket_id, user)
++    ).fetchone()
+     if row is None:
+         abort(404)
+     return jsonify(dict(row))

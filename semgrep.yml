@@ -1,0 +1,16 @@
+rules:
+  - id: sql-built-from-an-f-string
+    message: SQL built from an f-string. Text a user typed can change the query.
+    severity: ERROR
+    languages: [python]
+    pattern: $DB.execute(f"...", ...)
+  - id: secret-key-in-the-code
+    message: The secret key is written in the code. Read it from the environment.
+    severity: ERROR
+    languages: [python]
+    pattern: $APP.secret_key = "..."
+  - id: debug-mode-on
+    message: Debug mode lets anyone who reaches the app run code on the server.
+    severity: ERROR
+    languages: [python]
+    pattern: $APP.run(..., debug=True, ...)

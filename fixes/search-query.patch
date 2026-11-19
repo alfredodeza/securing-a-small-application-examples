@@ -1,0 +1,12 @@
+--- app.py
++++ app.py
+@@ -135,7 +135,8 @@
+     user = signed_in()
+     words = request.args.get("q", "")
+     rows = db().execute(
+-        f"SELECT id, subject FROM tickets WHERE owner = '{user}' AND subject LIKE '%{words}%'"
++        "SELECT id, subject FROM tickets WHERE owner = ? AND subject LIKE ?",
++        (user, f"%{words}%"),
+     ).fetchall()
+     return jsonify([dict(r) for r in rows])
+ 

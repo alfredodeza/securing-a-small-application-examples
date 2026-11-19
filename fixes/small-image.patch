@@ -1,0 +1,14 @@
+--- Dockerfile
++++ Dockerfile
+@@ -1,8 +1,10 @@
+-FROM python:3.12.16-bookworm
++FROM python:3.12.16-slim-bookworm
+ WORKDIR /app
+ RUN pip install --no-cache-dir uv==0.9.18
+ COPY pyproject.toml uv.lock ./
+ RUN uv sync --frozen --no-dev
+ COPY app.py ./
+ ENV HOST=0.0.0.0
++RUN useradd --uid 1000 app && chown app /app
++USER app
+ CMD [".venv/bin/python", "app.py"]

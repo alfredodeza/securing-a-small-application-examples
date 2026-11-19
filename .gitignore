@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+helpdesk.db
+cookies.txt
+*.orig
+*.rej
+.pytest_cache/

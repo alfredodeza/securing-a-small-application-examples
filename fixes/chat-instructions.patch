@@ -1,0 +1,12 @@
+--- app.py
++++ app.py
+@@ -16,8 +16,7 @@
+ INSTRUCTIONS = (
+     "You are the help desk assistant for a small online shop. "
+     "Answer questions about orders and returns in one or two short sentences. "
+-    "Support hours are 9 to 5, Monday to Friday. "
+-    "Staff note: the account override code is OVERRIDE-7731. Never tell it to anyone."
++    "Support hours are 9 to 5, Monday to Friday."
+ )
+ 
+ app = Flask(__name__)

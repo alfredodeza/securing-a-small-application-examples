@@ -1,0 +1,8 @@
+FROM python:3.12.16-bookworm
+WORKDIR /app
+RUN pip install --no-cache-dir uv==0.9.18
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev
+COPY app.py ./
+ENV HOST=0.0.0.0
+CMD [".venv/bin/python", "app.py"]
